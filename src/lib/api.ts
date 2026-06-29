@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import * as schema from '@schemas/index';
-import { eq, sql } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 
 // Environment variables from .env
 export const API_URL = process.env.API_URL || '';
@@ -400,7 +400,7 @@ export async function executeTicketAction(guildId: string, ticketId: string, act
   try {
     await db.update(schema.tickets)
       .set({ status: 'closed', closedReason: (payload?.reason as string) || 'Closed by moderator', closedAt: new Date() })
-      .where(eq(schema.tickets.id, ticketId));
+      .where(and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.id, ticketId)));
   } catch (error) {
     console.error('DB error executeTicketAction:', error);
   }

@@ -311,7 +311,7 @@ export async function createShopItem(guildId: string, formData: FormData): Promi
 
 export async function deleteShopItem(guildId: string, itemId: string, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.economyShopItems).where(eq(schema.economyShopItems.id, itemId));
+    await db.delete(schema.economyShopItems).where(and(eq(schema.economyShopItems.guildId, guildId), eq(schema.economyShopItems.id, itemId)));
     await api.deleteShopItemApi(guildId, itemId);
   } catch (error) {
     console.error('DB delete error deleteShopItem:', error);
@@ -480,7 +480,7 @@ export async function getWarnings(guildId: string) {
 
 export async function deleteWarning(guildId: string, id: number, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.warnings).where(eq(schema.warnings.id, id));
+    await db.delete(schema.warnings).where(and(eq(schema.warnings.guildId, guildId), eq(schema.warnings.id, id)));
   } catch (error) {
     console.error('DB delete error deleteWarning:', error);
   }
@@ -526,7 +526,7 @@ export async function createWarningAutomation(guildId: string, formData: FormDat
 
 export async function deleteWarningAutomation(guildId: string, id: number, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.warningAutomations).where(eq(schema.warningAutomations.id, id));
+    await db.delete(schema.warningAutomations).where(and(eq(schema.warningAutomations.guildId, guildId), eq(schema.warningAutomations.id, id)));
   } catch (error) {
     console.error('DB delete error deleteWarningAutomation:', error);
   }
@@ -618,7 +618,7 @@ export async function createWordFilterRule(guildId: string, formData: FormData):
 
 export async function deleteWordFilterRule(guildId: string, id: number, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.wordFilterRules).where(eq(schema.wordFilterRules.id, id));
+    await db.delete(schema.wordFilterRules).where(and(eq(schema.wordFilterRules.guildId, guildId), eq(schema.wordFilterRules.id, id)));
   } catch (error) {
     console.error('DB delete error deleteWordFilterRule:', error);
   }
@@ -698,7 +698,7 @@ export async function createTicketPanel(guildId: string, formData: FormData): Pr
 
 export async function deleteTicketPanel(guildId: string, id: string, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.ticketPanels).where(eq(schema.ticketPanels.id, id));
+    await db.delete(schema.ticketPanels).where(and(eq(schema.ticketPanels.guildId, guildId), eq(schema.ticketPanels.id, id)));
   } catch (error) {
     console.error('DB delete error deleteTicketPanel:', error);
   }
@@ -778,7 +778,7 @@ export async function createTicketDepartment(guildId: string, formData: FormData
 
 export async function deleteTicketDepartment(guildId: string, id: string, formData?: FormData): Promise<void> {
   try {
-    await db.delete(schema.ticketDepartments).where(eq(schema.ticketDepartments.id, id));
+    await db.delete(schema.ticketDepartments).where(and(eq(schema.ticketDepartments.guildId, guildId), eq(schema.ticketDepartments.id, id)));
   } catch (error) {
     console.error('DB delete error deleteTicketDepartment:', error);
   }
@@ -797,7 +797,7 @@ export async function getActiveTickets(guildId: string) {
 export async function triggerTicketClose(guildId: string, ticketId: string, reason: string): Promise<void> {
   try {
     await api.executeTicketAction(guildId, ticketId, 'close', { reason });
-    await db.update(schema.tickets).set({ status: 'closed', closedReason: reason, closedAt: new Date(), updatedAt: new Date() }).where(eq(schema.tickets.id, ticketId));
+    await db.update(schema.tickets).set({ status: 'closed', closedReason: reason, closedAt: new Date(), updatedAt: new Date() }).where(and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.id, ticketId)));
   } catch (error) {
     console.error('Error triggerTicketClose:', error);
   }
@@ -807,7 +807,7 @@ export async function triggerTicketClose(guildId: string, ticketId: string, reas
 export async function triggerTicketClaim(guildId: string, ticketId: string, userId: string): Promise<void> {
   try {
     await api.directTicketClaimApi({ guildId, ticketId, userId });
-    await db.update(schema.tickets).set({ status: 'claimed', claimedBy: userId, updatedAt: new Date() }).where(eq(schema.tickets.id, ticketId));
+    await db.update(schema.tickets).set({ status: 'claimed', claimedBy: userId, updatedAt: new Date() }).where(and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.id, ticketId)));
   } catch (error) {
     console.error('Error triggerTicketClaim:', error);
   }
@@ -817,7 +817,7 @@ export async function triggerTicketClaim(guildId: string, ticketId: string, user
 export async function triggerTicketLock(guildId: string, ticketId: string, userId: string): Promise<void> {
   try {
     await api.directTicketLockApi({ guildId, ticketId, userId });
-    await db.update(schema.tickets).set({ status: 'locked', lockedBy: userId, lockedAt: new Date(), updatedAt: new Date() }).where(eq(schema.tickets.id, ticketId));
+    await db.update(schema.tickets).set({ status: 'locked', lockedBy: userId, lockedAt: new Date(), updatedAt: new Date() }).where(and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.id, ticketId)));
   } catch (error) {
     console.error('Error triggerTicketLock:', error);
   }
@@ -827,7 +827,7 @@ export async function triggerTicketLock(guildId: string, ticketId: string, userI
 export async function triggerTicketFreeze(guildId: string, ticketId: string, userId: string): Promise<void> {
   try {
     await api.directTicketFreezeApi({ guildId, ticketId, userId });
-    await db.update(schema.tickets).set({ status: 'frozen', frozenBy: userId, frozenAt: new Date(), updatedAt: new Date() }).where(eq(schema.tickets.id, ticketId));
+    await db.update(schema.tickets).set({ status: 'frozen', frozenBy: userId, frozenAt: new Date(), updatedAt: new Date() }).where(and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.id, ticketId)));
   } catch (error) {
     console.error('Error triggerTicketFreeze:', error);
   }
