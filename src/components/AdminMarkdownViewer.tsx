@@ -62,11 +62,25 @@ export default function AdminMarkdownViewer({ content, title, subtitle, badge }:
   };
 
   const formatInline = (text: string) => {
-    return text
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    return escaped
       .replace(/`([^`]+)`/g, '<code class="bg-[#5E5CE6]/10 text-[#5E5CE6] border border-[#5E5CE6]/20 px-1.5 py-0.5 text-[11px] font-mono">$1</code>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
       .replace(/\*([^*]+)\*/g, '<em class="text-neutral-200 italic">$1</em>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-[#5E5CE6] hover:underline inline-flex items-center gap-1">$1</a>');
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, p1, p2) => {
+        const cleanUrl = p2.trim().replace(/^&#039;|&quot;/g, '').replace(/&#039;|&quot;$/g, '');
+        const lowerUrl = cleanUrl.toLowerCase();
+        if (lowerUrl.startsWith('javascript:') || lowerUrl.startsWith('data:') || lowerUrl.startsWith('vbscript:')) {
+          return `<a href="#" class="text-[#5E5CE6] hover:underline inline-flex items-center gap-1">${p1}</a>`;
+        }
+        return `<a href="${cleanUrl}" class="text-[#5E5CE6] hover:underline inline-flex items-center gap-1">${p1}</a>`;
+      });
   };
 
   for (let i = 0; i < lines.length; i++) {

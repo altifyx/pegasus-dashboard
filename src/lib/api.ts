@@ -769,7 +769,7 @@ export async function getUserAdminGuilds(accessToken?: string) {
           // Return all real user guilds with accurate isAdmin and botInServer status
           return await Promise.all(data.map(async (g: any) => {
             const isAdmin = (BigInt(g.permissions ?? 0) & BigInt(0x8)) === BigInt(0x8);
-            const botInServer = liveApiGuildIds.has(g.id) || dbGuilds.some(dbg => dbg.id === g.id);
+            const botInServer = liveApiGuildIds.has(g.id);
             let memberCount = g.approximate_member_count || activeGuildsMap.get(g.id)?.memberCount || 0;
             if (!memberCount && botToken && botInServer) {
               try {

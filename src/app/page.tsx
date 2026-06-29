@@ -69,7 +69,7 @@ export default async function HomePage() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               )}
-              <a href="https://discord.com/oauth2/authorize?client_id=1375140177961418774" target="_blank" rel="noopener noreferrer" className="border border-white/10 px-6 py-4 hover:border-white/20 text-neutral-300 transition-colors rounded-none bg-white/[0.02]">
+              <a href="https://discord.com/oauth2/authorize?client_id=1375140177961418774&permissions=8&scope=bot%20applications.commands" target="_blank" rel="noopener noreferrer" className="border border-white/10 px-6 py-4 hover:border-white/20 text-neutral-300 transition-colors rounded-none bg-white/[0.02]">
                 Deploy to Server
               </a>
             </div>

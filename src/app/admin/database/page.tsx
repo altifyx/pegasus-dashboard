@@ -100,7 +100,7 @@ export default async function AdminDatabasePage({
   let rows: any[] = [];
   let fetchError: string | null = null;
 
-  if (currentTable && (schema as any)[currentTable]) {
+  if (currentTable && ALL_KNOWN_TABLES.includes(currentTable) && (schema as any)[currentTable]) {
     try {
       rows = await db.select().from((schema as any)[currentTable]);
     } catch (e: any) {

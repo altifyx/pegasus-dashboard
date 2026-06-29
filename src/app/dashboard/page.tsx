@@ -153,7 +153,7 @@ export default async function DashboardSelectPage() {
                       </p>
                     </div>
                     <a
-                      href={`https://discord.com/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}&disable_guild_select=true&redirect_uri=${encodeURIComponent(`${appUrl}/dashboard/${guild.id}`)}&response_type=code`}
+                      href={`https://discord.com/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}&disable_guild_select=true`}
                       className="flex items-center justify-between border border-amber-500/30 bg-amber-500/10 px-6 py-4 text-xs font-mono text-amber-300 hover:bg-amber-500 hover:text-black transition-all rounded-none group/btn w-full"
                     >
                       <span>Invite Bot</span>

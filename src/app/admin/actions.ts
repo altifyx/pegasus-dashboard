@@ -6,7 +6,21 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+const ALL_KNOWN_TABLES = [
+  'guilds', 'guildSettings', 'users', 'members', 'modCases', 'warnings',
+  'warningAutomations', 'modLogSettings', 'wordFilterRules', 'giveaways',
+  'giveawayEntries', 'ticketPanels', 'tickets', 'ticketMessages', 'userXp',
+  'xpRewards', 'xpMultipliers', 'xpSettings', 'economyBalances',
+  'economyTransactions', 'economyShopItems', 'economyUserItems', 'economyCooldowns',
+  'economyGamblingStats', 'economySettings', 'securityLogs', 'blacklist',
+  'auditLogs', 'rateLimitViolations', 'securityIncidents', 'apiKeys',
+  'jtcConfigs', 'jtcChannels', 'autoModRules', 'autoModInfractions',
+  'quarantineVault', 'achievements', 'userAchievements', 'engagementQuests',
+  'userQuestProgress', 'userReputation', 'ticketDepartments', 'ticketRatings'
+];
+
 export async function updateDatabaseEntry(tableName: string, pkObjStr: string, existingRowJson: string, formData: FormData) {
+  if (!ALL_KNOWN_TABLES.includes(tableName)) throw new Error(`Invalid table name: ${tableName}`);
   const table = (schema as any)[tableName];
   if (!table) throw new Error(`Table ${tableName} not found in schema`);
 
@@ -15,6 +29,9 @@ export async function updateDatabaseEntry(tableName: string, pkObjStr: string, e
   
   // Build the where clause
   const conditions = Object.entries(pkObj).map(([colName, colValue]) => {
+    if (!table[colName] || colName === '_' || colName === 'getSQL' || colName === 'config') {
+      throw new Error(`Invalid column name: ${colName}`);
+    }
     return eq(table[colName], colValue);
   });
   
@@ -25,7 +42,8 @@ export async function updateDatabaseEntry(tableName: string, pkObjStr: string, e
   
   for (const colName of Object.keys(existingRow)) {
     if (colName in pkObj) continue; // don't update primary key
-    if (colName === '_' || colName === 'createdAt' || colName === 'updatedAt') continue;
+    if (colName === '_' || colName === 'createdAt' || colName === 'updatedAt' || colName === 'getSQL' || colName === 'config') continue;
+    if (!table[colName]) continue;
     
     if (formData.has(colName)) {
       const formValue = formData.get(colName) as string;
@@ -59,6 +77,7 @@ export async function updateDatabaseEntry(tableName: string, pkObjStr: string, e
 }
 
 export async function createDatabaseEntry(tableName: string, formData: FormData) {
+  if (!ALL_KNOWN_TABLES.includes(tableName)) throw new Error(`Invalid table name: ${tableName}`);
   const table = (schema as any)[tableName];
   if (!table) throw new Error(`Table ${tableName} not found in schema`);
 
@@ -100,12 +119,16 @@ export async function createDatabaseEntry(tableName: string, formData: FormData)
 }
 
 export async function deleteDatabaseEntry(tableName: string, pkObjStr: string) {
+  if (!ALL_KNOWN_TABLES.includes(tableName)) throw new Error(`Invalid table name: ${tableName}`);
   const table = (schema as any)[tableName];
   if (!table) throw new Error(`Table ${tableName} not found in schema`);
 
   const pkObj = JSON.parse(pkObjStr);
   
   const conditions = Object.entries(pkObj).map(([colName, colValue]) => {
+    if (!table[colName] || colName === '_' || colName === 'getSQL' || colName === 'config') {
+      throw new Error(`Invalid column name: ${colName}`);
+    }
     return eq(table[colName], colValue);
   });
   
