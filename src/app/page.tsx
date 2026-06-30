@@ -135,7 +135,7 @@ export default async function HomePage() {
           <div className="flex items-center gap-8">
             <a href="https://cptcr.uk" target="_blank" rel="noopener noreferrer" className="hover:text-[#5E5CE6] transition-colors">Developer</a>
             <a href="https://discord.gg/vaultscope" target="_blank" rel="noopener noreferrer" className="hover:text-[#5E5CE6] transition-colors">Support Server</a>
-            <a href="https://github.com/semi-constructor/pegasus" target="_blank" rel="noopener noreferrer" className="hover:text-[#5E5CE6] transition-colors">GitHub</a>
+            <Link href="/source" className="hover:text-[#5E5CE6] transition-colors">Source Code</Link>
             <Link href="/privacy" className="hover:text-[#5E5CE6] transition-colors">Privacy</Link>
             <Link href="/terms-of-service" className="hover:text-[#5E5CE6] transition-colors">Terms of Service</Link>
             <Link href="/tech" className="hover:text-[#5E5CE6] transition-colors">Technologies</Link>

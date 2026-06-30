@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pegasus | High-Performance Discord Bot",
-  description: "Advanced, production-ready Discord bot administration dashboard and landing page.",
+  title: "Pegasus | A better Discord experience.",
+  description: "Powerful moderation, seamless management, and fun for your server. All in one place.",
 };
 
 export default function RootLayout({
