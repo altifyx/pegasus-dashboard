@@ -127,7 +127,7 @@ export function MagneticButton({ children, href, className = '', external = fals
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      animate={{ x: xSpring, y: ySpring }}
+      style={{ x: xSpring, y: ySpring }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`relative overflow-hidden cursor-pointer ${className}`}
